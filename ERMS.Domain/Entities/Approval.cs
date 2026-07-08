@@ -3,7 +3,7 @@ using System;
 namespace ERMS.Domain.Entities
 {
 
-    public class Approvals
+    public class Approval
     {
         public int ApprovalId { get; set; }
         public int RequestId { get; set; }
@@ -11,7 +11,7 @@ namespace ERMS.Domain.Entities
 
 
         public int ApproverId { get; set; }
-        public User Approver { get; set; } = null!;
+        public Microsoft.Azure.Documents.User Approver { get; set; } = null!;
 
         public string Decision { get; set; } = string.Empty;
 

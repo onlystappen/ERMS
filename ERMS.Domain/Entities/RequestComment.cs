@@ -1,9 +1,9 @@
-﻿using Microsoft.Azure.Documents;
+﻿
 using System;
 
 namespace ERMS.Domain.Entities
 {
-    public class RequestComments
+    public class RequestComment
     {
         public int CommentId { get; set; }          //PK
 
@@ -11,7 +11,7 @@ namespace ERMS.Domain.Entities
         Request Request { get; set; }     
 
         public int AuthorId { get; set; }           //FK --> User
-        public User Author { get; set; }  = null;
+        public User Author { get; set; } = null!;
 
         public string Content { get; set; }          
         public DateTime CreateddAt { get; set; }    

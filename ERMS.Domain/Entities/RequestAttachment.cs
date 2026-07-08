@@ -2,7 +2,7 @@
 namespace ERMS.Domain.Entities
 {
 
-    public class RequestAttachments
+    public class RequestAttachment
     {
         public int AttachmentId { get; set; }
 

@@ -5,7 +5,7 @@ namespace ERMS.Domain.Entities
 {
     public class RequestComment
     {
-        public int CommentId { get; set; }          //PK
+        public int RequestCommentId { get; set; }          //PK
 
         public int RequestId { get; set; }          //FK --> Request
         Request Request { get; set; }     

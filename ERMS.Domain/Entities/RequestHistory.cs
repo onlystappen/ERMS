@@ -6,7 +6,7 @@ namespace ERMS.Domain.Entities
 {
     public class RequestHistory
     {
-        public int HistoryId { get; set; }
+        public int RequestHistoryId { get; set; }
         public int RequestId { get; set; }
 
         public int ChangedById { get; set; }

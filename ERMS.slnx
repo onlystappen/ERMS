@@ -3,5 +3,4 @@
   <Project Path="ERMS.Application/ERMS.Application.csproj" />
   <Project Path="ERMS.Domain/ERMS.Domain.csproj" />
   <Project Path="ERMS.Infrastructure/ERMS.Infrastructure.csproj" />
-  <Project Path="ERMS/ERMS.csproj" />
 </Solution>

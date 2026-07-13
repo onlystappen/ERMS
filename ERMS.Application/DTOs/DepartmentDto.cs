@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ERMS.Domain.Entities
+namespace ERMS.Application.DTOs
 {
-    public class Department
+    public class DepartmentDto
     {
         public int DepartmentId { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 
-        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

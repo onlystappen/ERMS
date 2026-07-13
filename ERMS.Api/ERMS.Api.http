@@ -1,6 +1,7 @@
-@ERMS.Api_HostAddress = http://localhost:5118
+POST http://localhost:5118/api/auth/login
+Content-Type: application/json
 
-GET {{ERMS.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
+{
+  "email": "arda@example.com",
+  "password": "123"
+}

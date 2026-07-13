@@ -11,10 +11,13 @@ builder.Services.AddInfrastructure();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ERMS.Application.Common.Interfaces.IApplicationDbContext>(provider =>
+    provider.GetRequiredService<ERMS.Infrastructure.Persistence.AppDbContext>());
+builder.Services.AddScoped<ERMS.Application.Services.AuthService>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

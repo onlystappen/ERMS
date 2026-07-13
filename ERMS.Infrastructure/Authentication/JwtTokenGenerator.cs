@@ -30,8 +30,7 @@ namespace ERMS.Infrastructure.Authentication
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)); // Secret key'i byte dizisine çeviriyoruz
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); // Token imzalama algoritmasını belirliyoruz
 
-            DateTime expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JwtSettings: ExpiryInMinutes"]));
-            var claims = new[]
+            DateTime expires = DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JwtSettings:ExpiryInMinutes"])); var claims = new[]
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
         new Claim(JwtRegisteredClaimNames.Email, user.Email),

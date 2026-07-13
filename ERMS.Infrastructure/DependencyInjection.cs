@@ -1,6 +1,7 @@
 ﻿using ERMS.Infrastructure.Authentication;
 using ERMS.Application.Common.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using ERMS.Application.Services;
 
 namespace ERMS.Infrastructure
 {
@@ -10,6 +11,9 @@ namespace ERMS.Infrastructure
         {
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             return services;
+            services.AddScoped<AuthService>();
+            
+
         }
 
 

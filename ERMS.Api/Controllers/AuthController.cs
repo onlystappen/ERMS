@@ -23,5 +23,13 @@ namespace ERMS.Api.Controllers
 
             return Ok(result);
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] ERMS.Application.DTOs.RegisterDto registerDto)
+        {
+            var result = await _authService.RegisterAsync(registerDto);
+            if (!result)
+                return BadRequest(new { message = "Kullanıcı kaydı başarısız oldu veya bu e posta zaten kullanılıyor" });
+            return Ok(new { message = "Kullanıcı kaydı yapıldı" });
+        }
     }
 }

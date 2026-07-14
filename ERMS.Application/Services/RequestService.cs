@@ -36,5 +36,35 @@ namespace ERMS.Application.Services
             })
             .ToListAsync();
         }
+
+        public async Task<RequestDto> CreateRequestAsync(RequestDto requestDto)
+        {
+            var request = new Request
+            {
+                RequestTypeId = requestDto.RequestTypeId,
+                RequesterId = requestDto.RequesterId,
+                Title = requestDto.Title,
+                Description = requestDto.Description,
+                Status = Domain.Enums.RequestStatus.Pending,
+                Priority = string.IsNullOrEmpty(requestDto.Priority) ? "Normal" : requestDto.Priority,
+
+                StartDate = requestDto.StartDate,
+                EndDate = requestDto.EndDate,
+                Amount = requestDto.Amount,
+
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+
+            };
+
+            _context.Requests.Add(request);
+
+            await _context.SaveChangesAsync(CancellationToken.None);
+
+            requestDto.RequestId = request.RequestId;
+            requestDto.Status = request.Status;
+
+            return requestDto;
+        }
     }
 }

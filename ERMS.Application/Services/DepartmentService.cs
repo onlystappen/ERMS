@@ -44,5 +44,45 @@ namespace ERMS.Application.Services
             departmentDto.DepartmentId = department.DepartmentId;
             return departmentDto;
         }
+        public async Task<bool> UpdateDepartmentAsync(int id, DepartmentDto departmentDto)
+        {
+            
+            var department = await _context.Departments
+                .FirstOrDefaultAsync(d => d.DepartmentId == id);
+
+            
+            if (department == null)
+            {
+                return false;
+            }
+
+            
+            department.Name = departmentDto.Name;
+            department.Description = departmentDto.Description;
+
+            
+            await _context.SaveChangesAsync(CancellationToken.None);
+            return true;
+        }
+
+        public async Task<bool> DeleteDepartmentAsync(int id)
+        {
+            
+            var department = await _context.Departments
+                .FirstOrDefaultAsync(d => d.DepartmentId == id);
+
+            
+            if (department == null)
+            {
+                return false;
+            }
+
+            
+            _context.Departments.Remove(department);
+
+            
+            await _context.SaveChangesAsync(CancellationToken.None);
+            return true;
+        }
     }
 }

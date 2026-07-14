@@ -90,5 +90,19 @@ namespace ERMS.Application.Services
             return true;
 
         }
+
+        public async Task<bool> DeleteRequestAsync(int id, RequestDto requestDto)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == id);
+            if (request == null)
+            {
+                return false;
+            }
+
+            _context.Requests.Remove(request);
+
+            await _context.SaveChangesAsync(CancellationToken.None);
+            return true;
+        }
     }
 }

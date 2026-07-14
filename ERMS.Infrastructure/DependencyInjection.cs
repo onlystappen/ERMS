@@ -9,13 +9,21 @@ namespace ERMS.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-            return services;
-            services.AddScoped<AuthService>();
             
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+            
+            services.AddScoped<AuthService>();
+
+            
+            services.AddScoped<DepartmentService>();
+
+            
+            services.AddScoped<RequestService>();
+
+
+            
+            return services;
         }
-
-
     }
 }

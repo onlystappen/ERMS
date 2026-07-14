@@ -66,5 +66,29 @@ namespace ERMS.Application.Services
 
             return requestDto;
         }
+
+        public async Task<bool> UpdateRequestAsync(int id, RequestDto requestDto)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == id);
+            if(request == null)
+            {
+                return false;
+
+            }
+
+            request.Title = requestDto.Title;
+            request.Description = requestDto.Description;
+            request.Status = requestDto.Status;
+            request.Priority = requestDto.Priority;
+            request.StartDate = requestDto.StartDate;
+            request.EndDate = requestDto.EndDate;
+            request.Amount = requestDto.Amount;
+
+            request.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync(CancellationToken.None);
+            return true;
+
+        }
     }
 }

@@ -71,6 +71,21 @@ namespace ERMS.Application.Services
 
         }
 
+        public async Task<List<ApprovalDto>> GetApprovalsByRequestIdAsync(int requestId)
+        {
+            return await _context.Approvals.Where(a => a.RequestId == requestId).Include(a => a.Approver).Select(a => new ApprovalDto
+            {
+                ApprovalId = a.ApprovalId,
+                RequestId = a.RequestId,
+                ApproverId = a.ApproverId,
+                Decision = a.Decision,
+                Comment = a.Comment,
+                DecidedAt = a.DecidedAt,
+                ApproverName = a.Approver != null ? a.Approver.FirstName + " " + a.Approver.LastName : "Bilinmeyen Yönetici"
+            })
+            .ToListAsync();
+        }
+
 
     }
 }

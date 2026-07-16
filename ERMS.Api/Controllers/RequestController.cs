@@ -1,4 +1,5 @@
-﻿using ERMS.Application.Services;
+﻿using ERMS.Application.DTOs;
+using ERMS.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,16 @@ namespace ERMS.Api.Controllers
             return Ok(requests);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateRequest([FromBody] RequestDto requestDto)
+        {
+            if(requestDto == null)
+            {
+                return BadRequest("Gönderilen talep verisi boş olamaz");
+            }
 
+            var createdRequest = await _requestService.CreateRequestAsync(requestDto);
+            return Ok(createdRequest);
+        }
     }
 }

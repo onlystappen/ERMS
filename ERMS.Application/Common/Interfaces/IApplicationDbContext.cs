@@ -15,6 +15,8 @@ namespace ERMS.Application.Common.Interfaces
 
         DbSet<Request> Requests { get; set; }
 
+        DbSet<Approval> Approvals { get; set; }
+
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

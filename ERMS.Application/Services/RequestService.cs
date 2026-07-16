@@ -104,5 +104,10 @@ namespace ERMS.Application.Services
             await _context.SaveChangesAsync(CancellationToken.None);
             return true;
         }
+
+        public async Task DeleteRequestAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,7 +1,9 @@
-﻿using ERMS.Application.DTOs;
+﻿using ERMS.Application.Common.Interfaces;
+using ERMS.Application.DTOs;
 using ERMS.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ERMS.Api.Controllers
 {
@@ -10,10 +12,12 @@ namespace ERMS.Api.Controllers
     public class RequestController : ControllerBase
     {
         private readonly RequestService _requestService;
+        private readonly IApplicationDbContext _context;
 
-        public RequestController(RequestService requestService)
+        public RequestController(RequestService requestService, IApplicationDbContext context)
         {
             _requestService = requestService;
+            _context = context;
         }
 
         [HttpGet]
@@ -47,6 +51,27 @@ namespace ERMS.Api.Controllers
             }
             return Ok(new { message = "Talep Başarıyla Güncellendi" });
 
+        }
+
+        [HttpDelete("{id}")]
+
+        
+        public async Task<bool> DeleteRequestAsync(int id)
+        {
+            var request = await _context.Requests
+                .FirstOrDefaultAsync(r => r.RequestId == id);
+
+            if (request == null)
+            {
+                
+                return false;
+            }
+
+            _context.Requests.Remove(request);
+            await _context.SaveChangesAsync(CancellationToken.None);
+
+            
+            return true;
         }
     }
 }

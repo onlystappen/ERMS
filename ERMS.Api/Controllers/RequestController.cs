@@ -15,6 +15,13 @@ namespace ERMS.Api.Controllers
             _requestService = requestService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetRequests()
+        {
+            var requests = await _requestService.GetAllRequestsAsync();
+            return Ok(requests);
+        }
+
 
     }
 }

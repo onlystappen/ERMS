@@ -34,5 +34,19 @@ namespace ERMS.Api.Controllers
             var createdRequest = await _requestService.CreateRequestAsync(requestDto);
             return Ok(createdRequest);
         }
+
+        [HttpPut("{id}")]
+
+        public async Task<IActionResult> UpdateRequest(int id, [FromBody] RequestDto requestDto)
+        {
+            var isUpdated = await _requestService.UpdateRequestAsync(id, requestDto);
+            if (!isUpdated)
+            {
+                return NotFound($"{id} numaralı talep bulunamadı");
+
+            }
+            return Ok(new { message = "Talep Başarıyla Güncellendi" });
+
+        }
     }
 }

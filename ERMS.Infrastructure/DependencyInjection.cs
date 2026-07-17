@@ -21,6 +21,8 @@ namespace ERMS.Infrastructure
             
             services.AddScoped<RequestService>();
 
+            services.AddScoped<ApprovalService>();
+
 
             
             return services;

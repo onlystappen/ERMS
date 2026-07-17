@@ -26,7 +26,30 @@ namespace ERMS.Api.Controllers
             var result = await _approvalService.CreateApprovalAsync(approvalDto);
 
             return Ok(result);
+
+
         }
+
+        [HttpPut("{id}/decision")]
+        public async Task<IActionResult> MakeDecision(int id, [FromBody] ApprovalDto decisionDto)
+        {
+            if(decisionDto == null)
+            {
+                return BadRequest("Karar  Verisi  Boş  Olamaz");
+
+            }
+
+            var result = await _approvalService.MakeDecisionAsync(id, decisionDto.Decision, decisionDto.Comment);
+
+
+            if (!result)
+            {
+                return NotFound("Güncellenmek istenen onay kaydı bulunamadı");
+            }
+
+            return Ok(new { message = "Karar başarıyla kaydedildi" });
+        }
+            
 
     }
 }

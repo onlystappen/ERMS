@@ -51,6 +51,15 @@ namespace ERMS.Api.Controllers
         }
 
 
+        [HttpGet("request/{requestId}")]
+
+        public async Task<IActionResult> GetByRequestId(int requestId)
+        {
+            var approvals = await _approvalService.GetApprovalsByRequestIdAsync(requestId);
+            return Ok(approvals);
+        }
+
+
 
             
 

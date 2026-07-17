@@ -1,45 +1,35 @@
-POST http://localhost:5118/api/auth/login
+### 1. Önce Test Kullanıcısı Oluştur  (Eşleşen JSON Şablonu)
+POST http://localhost:5118/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "arda@example.com",
-  "password": "123",
-  "firstName" : "Yahya Arda",
-  "lastName" : "Sandıkçı",
-  "role" : 1,
-  "departmentId" : 1,
-  "managerId" : 1
+  "firstName": "Yahya Arda",
+  "lastName": "Sandıkçı",
+  "email": "arda@erms.com",
+  "password": "123456",
+  "role": 1,
+  "departmentId": 1
 }
-
-### Yeni Talep Oluşturma
+###
+### 2. Sonra O Kullanıcı İçin Test Talebi Oluştur 
 POST http://localhost:5118/api/request
 Content-Type: application/json
 
 {
-  "requestTypeId": 1,
-  "requesterId": 1,
-  "title": "Yazılım Geliştirme İçin Monitör Talebi",
-  "description": "Çift ekran çalışabilmek için 27 inç monitör istiyorum bra.",
-  "priority": "Yüksek",
-  "startDate": "2026-07-20T09:00:00Z",
-  "endDate": "2026-07-27T18:00:00Z",
-  "amount": 0
+  "title": "Yeni Ekran Kartı Talebi",
+  "description": "Yazılım geliştirme için ekran kartı gerekiyor bra.",
+  "requesterId": 4,
+  "priority": "High"
 }
-### Tüm Talepleri Listeleme
-GET http://localhost:5118/api/request
 
-### Talebi Güncelleme (PUT)
-PUT http://localhost:5118/api/request/1
+### 4. Yönetici Karar Veriyor 
+PUT http://localhost:5118/api/approval/5/decision
 Content-Type: application/json
 
 {
-  "requestTypeId": 1,
-  "requesterId": 1,
-  "title": "Monitör ve Mekanik Klavye Talebi (Güncellendi)",
-  "description": "Çift ekran monitör ve yazılım geliştirme için mekanik klavye istiyorum bra.",
-  "status": 2,
-  "priority": "Çok Yüksek",
-  "startDate": "2026-07-20T09:00:00Z",
-  "endDate": "2026-07-27T18:00:00Z",
-  "amount": 1500
+  "decision": "Approved",
+  "comment": "Tebrikler bra, bütçe ve departman onay verdi."
 }
+
+### 5. Talebe Ait Onay Geçmişini Listele 
+GET http://localhost:5118/api/approval/request/3

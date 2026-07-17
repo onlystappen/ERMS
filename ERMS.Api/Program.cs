@@ -29,4 +29,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ERMS.Infrastructure.Persistence.AppDbContext>();
+        // Veritabanı yoksa sıfırdan oluşturur, migration'ları otomatik uygular bra!
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"DB Kurulurken hata oluştu : {ex.Message}");
+    }
+}
+
 app.Run();

@@ -45,7 +45,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 2. Swagger Yapılandırması (Sürüm Çakışması Olmayan Yalın Yapı)
+
 builder.Services.AddSwaggerGen();
 
 // Scoped Servis Kayıtları

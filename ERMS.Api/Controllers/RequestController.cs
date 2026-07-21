@@ -10,7 +10,7 @@ namespace ERMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Güvenlik Katmanı: Tüm talep işlemleri için JWT Token zorunlu
+    [Authorize] // Tüm talep işlemleri için JWT Token zorunlu
     public class RequestController : ControllerBase
     {
         private readonly RequestService _requestService;

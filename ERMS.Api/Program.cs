@@ -45,7 +45,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
 builder.Services.AddSwaggerGen();
 
 // Scoped Servis Kayıtları
@@ -53,6 +52,7 @@ builder.Services.AddScoped<ERMS.Application.Common.Interfaces.IApplicationDbCont
     provider.GetRequiredService<ERMS.Infrastructure.Persistence.AppDbContext>());
 
 builder.Services.AddScoped<ERMS.Application.Services.AuthService>();
+builder.Services.AddScoped<ERMS.Application.Services.AuditLogService>(); // <-- AuditLog Servis Kaydı
 
 var app = builder.Build();
 

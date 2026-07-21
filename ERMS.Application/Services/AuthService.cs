@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ERMS.Application.Common.Interfaces;
 using ERMS.Application.DTOs;
+using ERMS.Domain.Entities;
+using ERMS.Domain.Enums;
 
 namespace ERMS.Application.Services
 {
@@ -19,15 +21,17 @@ namespace ERMS.Application.Services
 
         public async Task<LoginResultDto?> LoginAsync(LoginDto loginDto)
         {
+            // Kullanıcıyı e-posta ile veritabanından çekiyoruz
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
-            if(user == null || user.PasswordHash != loginDto.Password)
+            if (user == null || user.PasswordHash != loginDto.Password)
             {
                 return null;
             }
 
+            // Token üreticiye User nesnesini veriyoruz. 
+            // Generator içerisinde ClaimTypes.Role alanına user.Role.ToString() yazıldığından emin olunmalıdır.
             var token = _tokenGenerator.GenerateToken(user);
-
 
             return new LoginResultDto
             {
@@ -37,20 +41,20 @@ namespace ERMS.Application.Services
                 Email = user.Email,
                 Token = token,
             };
-
         }
+
         public async Task<bool> RegisterAsync(RegisterDto registerDto)
         {
             var existingUser = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
             if (existingUser) return false;
 
-            var user = new ERMS.Domain.Entities.User
+            var user = new User
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
                 PasswordHash = registerDto.Password,
-                Role = (Domain.Enums.Role)registerDto.Role,
+                Role = (Role)registerDto.Role, // Enum dönüşümü
                 DepartmentId = registerDto.DepartmentId,
                 ManagerId = registerDto.ManagerId,
                 IsActive = true
@@ -59,7 +63,6 @@ namespace ERMS.Application.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync(CancellationToken.None);
             return true;
-
         }
     }
 }

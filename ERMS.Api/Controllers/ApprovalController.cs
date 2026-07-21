@@ -8,7 +8,7 @@ namespace ERMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // 1. Güvenlik Katmanı: Tüm controller için geçerli JWT Token şartı
+    [Authorize] // Tüm controller için geçerli JWT Token şartı
     public class ApprovalController : ControllerBase
     {
         private readonly ApprovalService _approvalService;

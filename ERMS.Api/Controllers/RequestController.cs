@@ -1,6 +1,7 @@
 ﻿using ERMS.Application.Common.Interfaces;
 using ERMS.Application.DTOs;
 using ERMS.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace ERMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] // Güvenlik Katmanı: Tüm talep işlemleri için JWT Token zorunlu
     public class RequestController : ControllerBase
     {
         private readonly RequestService _requestService;
@@ -30,7 +32,7 @@ namespace ERMS.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRequest([FromBody] RequestDto requestDto)
         {
-            if(requestDto == null)
+            if (requestDto == null)
             {
                 return BadRequest("Gönderilen talep verisi boş olamaz");
             }
@@ -40,38 +42,31 @@ namespace ERMS.Api.Controllers
         }
 
         [HttpPut("{id}")]
-
         public async Task<IActionResult> UpdateRequest(int id, [FromBody] RequestDto requestDto)
         {
             var isUpdated = await _requestService.UpdateRequestAsync(id, requestDto);
             if (!isUpdated)
             {
                 return NotFound($"{id} numaralı talep bulunamadı");
-
             }
             return Ok(new { message = "Talep Başarıyla Güncellendi" });
-
         }
 
         [HttpDelete("{id}")]
-
-        
-        public async Task<bool> DeleteRequestAsync(int id)
+        public async Task<IActionResult> DeleteRequestAsync(int id)
         {
             var request = await _context.Requests
                 .FirstOrDefaultAsync(r => r.RequestId == id);
 
             if (request == null)
             {
-                
-                return false;
+                return NotFound($"{id} numaralı talep bulunamadı.");
             }
 
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync(CancellationToken.None);
 
-            
-            return true;
+            return Ok(new { message = "Talep başarıyla silindi." });
         }
     }
 }

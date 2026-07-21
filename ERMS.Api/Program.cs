@@ -15,11 +15,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddInfrastructure();
 builder.Services.AddControllers();
 
-// OpenAPI & Endpoints Explorer
-builder.Services.AddOpenApi();
+// Swagger Yapılandırması
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// 1. JWT Authentication Yapılandırması
+// JWT Authentication Yapılandırması
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
@@ -45,21 +45,21 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddSwaggerGen();
-
-// Scoped Servis Kayıtları
+// Scoped Servis Kayıtları (Tüm Application Servisleri)
 builder.Services.AddScoped<ERMS.Application.Common.Interfaces.IApplicationDbContext>(provider =>
     provider.GetRequiredService<ERMS.Infrastructure.Persistence.AppDbContext>());
 
 builder.Services.AddScoped<ERMS.Application.Services.AuthService>();
-builder.Services.AddScoped<ERMS.Application.Services.AuditLogService>(); // <-- AuditLog Servis Kaydı
+builder.Services.AddScoped<ERMS.Application.Services.AuditLogService>();
+builder.Services.AddScoped<ERMS.Application.Services.RequestService>();
+builder.Services.AddScoped<ERMS.Application.Services.ApprovalService>();
+builder.Services.AddScoped<ERMS.Application.Services.DepartmentService>();
 
 var app = builder.Build();
 
 // Development Ortamı Middleware Ayarları
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

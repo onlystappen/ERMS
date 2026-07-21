@@ -29,8 +29,7 @@ namespace ERMS.Application.Services
                 return null;
             }
 
-            // Token üreticiye User nesnesini veriyoruz. 
-            // Generator içerisinde ClaimTypes.Role alanına user.Role.ToString() yazıldığından emin olunmalıdır.
+            
             var token = _tokenGenerator.GenerateToken(user);
 
             return new LoginResultDto

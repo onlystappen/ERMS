@@ -20,6 +20,7 @@ namespace ERMS.Infrastructure.Persistence
         public DbSet<RequestHistory> RequestHistories { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Approval> Approvals { get; set; }
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

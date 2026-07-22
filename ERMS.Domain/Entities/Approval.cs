@@ -19,5 +19,7 @@ namespace ERMS.Domain.Entities
 
         
         public DateTime? DecidedAt { get; set; }
+
+        public DateTime? ApprovedAt { get; set; }
     }
 }

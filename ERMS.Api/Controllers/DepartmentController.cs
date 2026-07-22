@@ -1,9 +1,6 @@
 ﻿using ERMS.Application.DTOs;
 using ERMS.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using ERMS.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using ERMS.Application.Common.Interfaces;
 
 namespace ERMS.Api.Controllers
 {
@@ -12,73 +9,33 @@ namespace ERMS.Api.Controllers
     public class DepartmentsController : ControllerBase
     {
         private readonly DepartmentService _departmentService;
-        private readonly IApplicationDbContext _context;
 
-        
-        public DepartmentsController(DepartmentService departmentService, IApplicationDbContext context)
+        public DepartmentsController(DepartmentService departmentService)
         {
             _departmentService = departmentService;
-            _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<DepartmentDto>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var departments = await _departmentService.GetAllDepartmentsAsync();
-            return Ok(departments);
+            var result = await _departmentService.GetAllDepartmentsAsync();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<DepartmentDto>> Create([FromBody] DepartmentDto departmentDto)
+        public async Task<IActionResult> Create([FromBody] DepartmentDto dto)
         {
-            var createdDepartment = await _departmentService.CreateDepartmentAsync(departmentDto);
-            return Ok(createdDepartment);
+            var result = await _departmentService.CreateDepartmentAsync(dto);
+            return Ok(result);
         }
 
-        public async Task<bool> UpdateDepartmentAsync(int id, DepartmentDto departmentDto)
-        {
-            var department = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentId == id);
-
-            if (department == null)
-            {
-                return false;
-            }
-
-            department.Name = departmentDto.Name;
-            department.Description = departmentDto.Description;
-
-            await _context.SaveChangesAsync(CancellationToken.None);
-            return true;
-
-
-        }
-
+        // --- İŞTE EKSİK VEYA HATALI OLAN YER BURASI BRA ---
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] DepartmentDto departmentDto)
+        public async Task<IActionResult> UpdateDepartmentAsync(int id, [FromBody] DepartmentDto dto)
         {
-            bool isUpdated = await _departmentService.UpdateDepartmentAsync(id, departmentDto);
-
-            if (!isUpdated)
-            {
-                return NotFound("Güncellemek Istenen Departman Bulunamadı.");
-            }
-
-            return NoContent();
+            var result = await _departmentService.UpdateDepartmentAsync(id, dto);
+            if (!result) return NotFound();
+            return Ok();
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            bool isDeleted = await _departmentService.DeleteDepartmentAsync(id);
-
-            if (!isDeleted)
-            {
-                return NotFound("Silinmek Istenen Departman Bulunamadı");
-            }
-
-            return NoContent();
-        }
-
-
     }
 }

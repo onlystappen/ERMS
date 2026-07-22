@@ -3,6 +3,7 @@ using ERMS.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +16,39 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddInfrastructure();
 builder.Services.AddControllers();
 
-// Swagger Yapılandırması
+// Swagger / OpenAPI Yapılandırması
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Çakışan şema/model isimleri hatasını engeller (Failed to load API definition çözümüdür)
+    c.CustomSchemaIds(type => type.FullName);
+
+    // Swagger UI üzerinden JWT Token test edebilmek için "Authorize" butonu
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Token değerinizi girin. Örnek: Bearer {token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // JWT Authentication Yapılandırması
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -45,7 +76,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Scoped Servis Kayıtları (Tüm Application Servisleri)
+// Scoped Servis Kayıtları
 builder.Services.AddScoped<ERMS.Application.Common.Interfaces.IApplicationDbContext>(provider =>
     provider.GetRequiredService<ERMS.Infrastructure.Persistence.AppDbContext>());
 
@@ -61,7 +92,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ERMS API v1");
+    });
 }
 
 app.UseHttpsRedirection();
